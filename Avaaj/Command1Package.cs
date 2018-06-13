@@ -64,6 +64,7 @@ namespace Avaaj
         {
             Command1.Initialize(this);
             base.Initialize();
+            CodeSpanCommand.Initialize(this);
         }
 
         #endregion

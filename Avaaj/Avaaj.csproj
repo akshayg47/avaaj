@@ -54,6 +54,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="CodeSpanCommand.cs" />
     <Compile Include="Command1.cs" />
     <Compile Include="Command1Package.cs" />
     <Compile Include="GeneralSettings.Designer.cs">
@@ -80,6 +81,7 @@
       <ResourceName>Menus.ctmenu</ResourceName>
     </VSCTCompile>
     <Content Include="index.html" />
+    <Content Include="Resources\CodeSpanCommand.png" />
     <Content Include="Resources\Command1.png" />
     <Content Include="Resources\Command1Package.ico" />
     <Content Include="stylesheet.css" />
