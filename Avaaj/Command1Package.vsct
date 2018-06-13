@@ -29,7 +29,7 @@
                 id="IDG_VS_MM_TOOLSADDINS" />
         <Strings>
           <ButtonText>TestMenu</ButtonText>
-          <CommandName>CodyDocs</CommandName>
+          <CommandName>Unit Tests Generator</CommandName>
         </Strings>
       </Menu>
     </Menus>
@@ -66,7 +66,7 @@
         <Parent guid="guidCommand1PackageCmdSet" id="MyMenuGroup" />
         <Icon guid="guidImages" id="bmpPic1" />
         <Strings>
-          <ButtonText>Invoke Command1</ButtonText>
+          <ButtonText>Enable/Disable Unit Tests Generator</ButtonText>
         </Strings>
       </Button>
     </Buttons>

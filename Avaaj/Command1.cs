@@ -44,8 +44,9 @@ namespace Avaaj
             if (commandService != null)
             {
                 var menuCommandID = new CommandID(CommandSet, CommandId);
-                var menuItem = new MenuCommand(this.MenuItemCallback, menuCommandID);
-                commandService.AddCommand(menuItem);
+                var command = new MenuCommand(this.MenuItemCallback, menuCommandID);
+                command.Checked = GeneralSettings.Default.EnableUnitTestsGenerator;
+                commandService.AddCommand(command);
             }
         }
 
@@ -85,19 +86,27 @@ namespace Avaaj
         /// </summary>
         /// <param name="sender">Event sender.</param>
         /// <param name="e">Event args.</param>
+        //private void MenuItemCallback(object sender, EventArgs e)
+        //{
+        //    string message = string.Format(CultureInfo.CurrentCulture, "Inside {0}.MenuItemCallback()", this.GetType().FullName);
+        //    string title = "Command1";
+
+        //    // Show a message box to prove we were here
+        //    VsShellUtilities.ShowMessageBox(
+        //        this.ServiceProvider,
+        //        message,
+        //        title,
+        //        OLEMSGICON.OLEMSGICON_INFO,
+        //        OLEMSGBUTTON.OLEMSGBUTTON_OK,
+        //        OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+        //}
+
         private void MenuItemCallback(object sender, EventArgs e)
         {
-            string message = string.Format(CultureInfo.CurrentCulture, "Inside {0}.MenuItemCallback()", this.GetType().FullName);
-            string title = "Command1";
-
-            // Show a message box to prove we were here
-            VsShellUtilities.ShowMessageBox(
-                this.ServiceProvider,
-                message,
-                title,
-                OLEMSGICON.OLEMSGICON_INFO,
-                OLEMSGBUTTON.OLEMSGBUTTON_OK,
-                OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+            GeneralSettings.Default.EnableUnitTestsGenerator = !GeneralSettings.Default.EnableUnitTestsGenerator;
+            GeneralSettings.Default.Save();
+            var command = sender as MenuCommand;
+            command.Checked = GeneralSettings.Default.EnableUnitTestsGenerator;
         }
     }
 }
