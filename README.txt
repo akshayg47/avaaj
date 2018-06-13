@@ -1,2 +1,2 @@
 HELLO AVAAJ!
-Vitalii checkin!
+Vitalii Checkin
