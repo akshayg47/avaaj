@@ -32,6 +32,8 @@ namespace Avaaj
     [PackageRegistration(UseManagedResourcesOnly = true)]
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)] // Info on this package for Help/About
     [ProvideMenuResource("Menus.ctmenu", 1)]
+    [ProvideAutoLoad(VSConstants.UICONTEXT.NoSolution_string)]
+    [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string)]
     [Guid(Command1Package.PackageGuidString)]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
     public sealed class Command1Package : Package
@@ -62,6 +64,7 @@ namespace Avaaj
         {
             Command1.Initialize(this);
             base.Initialize();
+            CodeSpanCommand.Initialize(this);
         }
 
         #endregion

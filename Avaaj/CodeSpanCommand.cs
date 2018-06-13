@@ -9,17 +9,17 @@ namespace Avaaj
     /// <summary>
     /// Command handler
     /// </summary>
-    internal sealed class Command1
+    internal sealed class CodeSpanCommand
     {
         /// <summary>
         /// Command ID.
         /// </summary>
-        public const int CommandId = 0x0100;
+        public const int CommandId = 256;
 
         /// <summary>
         /// Command menu group (command set GUID).
         /// </summary>
-        public static readonly Guid CommandSet = new Guid("69a62bb1-d4ca-4339-a03a-15ffa75d0cad");
+        public static readonly Guid CommandSet = new Guid("187c712d-ea69-463c-8013-ed2b1ba89cf8");
 
         /// <summary>
         /// VS Package that provides this command, not null.
@@ -27,11 +27,11 @@ namespace Avaaj
         private readonly Package package;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Command1"/> class.
+        /// Initializes a new instance of the <see cref="CodeSpanCommand"/> class.
         /// Adds our command handlers for menu (commands must exist in the command table file)
         /// </summary>
         /// <param name="package">Owner package, not null.</param>
-        private Command1(Package package)
+        private CodeSpanCommand(Package package)
         {
             if (package == null)
             {
@@ -44,16 +44,15 @@ namespace Avaaj
             if (commandService != null)
             {
                 var menuCommandID = new CommandID(CommandSet, CommandId);
-                var command = new MenuCommand(this.MenuItemCallback, menuCommandID);
-                command.Checked = GeneralSettings.Default.EnableUnitTestsGenerator;
-                commandService.AddCommand(command);
+                var menuItem = new MenuCommand(this.MenuItemCallback, menuCommandID);
+                commandService.AddCommand(menuItem);
             }
         }
 
         /// <summary>
         /// Gets the instance of the command.
         /// </summary>
-        public static Command1 Instance
+        public static CodeSpanCommand Instance
         {
             get;
             private set;
@@ -76,7 +75,7 @@ namespace Avaaj
         /// <param name="package">Owner package, not null.</param>
         public static void Initialize(Package package)
         {
-            Instance = new Command1(package);
+            Instance = new CodeSpanCommand(package);
         }
 
         /// <summary>
@@ -86,27 +85,19 @@ namespace Avaaj
         /// </summary>
         /// <param name="sender">Event sender.</param>
         /// <param name="e">Event args.</param>
-        //private void MenuItemCallback(object sender, EventArgs e)
-        //{
-        //    string message = string.Format(CultureInfo.CurrentCulture, "Inside {0}.MenuItemCallback()", this.GetType().FullName);
-        //    string title = "Command1";
-
-        //    // Show a message box to prove we were here
-        //    VsShellUtilities.ShowMessageBox(
-        //        this.ServiceProvider,
-        //        message,
-        //        title,
-        //        OLEMSGICON.OLEMSGICON_INFO,
-        //        OLEMSGBUTTON.OLEMSGBUTTON_OK,
-        //        OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
-        //}
-
         private void MenuItemCallback(object sender, EventArgs e)
         {
-            GeneralSettings.Default.EnableUnitTestsGenerator = !GeneralSettings.Default.EnableUnitTestsGenerator;
-            GeneralSettings.Default.Save();
-            var command = sender as MenuCommand;
-            command.Checked = GeneralSettings.Default.EnableUnitTestsGenerator;
+            string message = string.Format(CultureInfo.CurrentCulture, "Inside {0}.MenuItemCallback()", this.GetType().FullName);
+            string title = "CodeSpanCommand";
+
+            // Show a message box to prove we were here
+            VsShellUtilities.ShowMessageBox(
+                this.ServiceProvider,
+                message,
+                title,
+                OLEMSGICON.OLEMSGICON_INFO,
+                OLEMSGBUTTON.OLEMSGBUTTON_OK,
+                OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
         }
     }
 }

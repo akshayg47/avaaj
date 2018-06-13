@@ -54,12 +54,22 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="CodeSpanCommand.cs" />
     <Compile Include="Command1.cs" />
     <Compile Include="Command1Package.cs" />
+    <Compile Include="GeneralSettings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>GeneralSettings.settings</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="GeneralSettings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>GeneralSettings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Key.snk" />
     <None Include="packages.config" />
     <None Include="source.extension.vsixmanifest">
@@ -71,6 +81,7 @@
       <ResourceName>Menus.ctmenu</ResourceName>
     </VSCTCompile>
     <Content Include="index.html" />
+    <Content Include="Resources\CodeSpanCommand.png" />
     <Content Include="Resources\Command1.png" />
     <Content Include="Resources\Command1Package.ico" />
     <Content Include="stylesheet.css" />
