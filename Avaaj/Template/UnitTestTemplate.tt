@@ -26,7 +26,7 @@ namespace <#=ContainingNamespace#>
     public class <#=TestClassName#>
     {
         /// <summary>
-        /// List of parameter types in the largest <see cref="AdminGroupsDirectoryBusiness"/> constructor in terms of number of params
+        /// List of parameter types in the largest <see cref="<#=ClassUnderTest#>"/> constructor in terms of number of params
         /// </summary>
         private static readonly Type[] CtorParamTypes = typeof(<#=ClassUnderTest#>).GetConstructors().
 																					OrderByDescending(ctor => ctor.GetParameters().Length).
