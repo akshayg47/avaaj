@@ -48,33 +48,33 @@ namespace Avaaj.Dialogs
             }
         }
 
-        public ICommand _generateCommand;
-        public ICommand GenerateCommand
-        {
-            get
-            {
-                if (_generateCommand == null)
-                {
-                    _generateCommand = new RelayCommand(GenerateTest);
-                }
-                return _generateCommand;
-            }
-        }
+        //public ICommand _generateCommand;
+        //public ICommand GenerateCommand
+        //{
+        //    get
+        //    {
+        //        if (_generateCommand == null)
+        //        {
+        //            _generateCommand = new RelayCommand(GenerateTest);
+        //        }
+        //        return _generateCommand;
+        //    }
+        //}
 
-        private void GenerateTest(object obj)
-        {                      
-            try
-            {
+        //private void GenerateTest(object obj)
+        //{                      
+        //    try
+        //    {
           
 
-                Result = AddTestResult.Generate;
-                CloseRequest?.Invoke();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Test generation failed. Exception: " + ex.ToString());
-            }
-        }   
+        //        Result = AddTestResult.Generate;
+        //        CloseRequest?.Invoke();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show("Test generation failed. Exception: " + ex.ToString());
+        //    }
+        //}   
 
 
         #region NOTIFY PROPERTY CHANGE

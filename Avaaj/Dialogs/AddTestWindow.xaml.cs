@@ -21,8 +21,14 @@ namespace Avaaj.Dialogs
     /// </summary>
     public partial class AddTestWindow
     {
-        public AddTestWindow(List<CandidatesModel> candidates)
+
+        private List<CandidatesModel> _candidates;
+        private MethodsInspector _methodsInspector;
+
+        public AddTestWindow(MethodsInspector methodsInspector)
         {
+            _methodsInspector = methodsInspector;
+            _candidates = methodsInspector.GetAllMethods();
             InitializeComponent();
             this.Loaded += OnLoaded;                    
 
@@ -90,7 +96,7 @@ namespace Avaaj.Dialogs
             InnerGrid.Children.Add(txtBlock4);
             int i = 0;
 
-            foreach (var candidate in candidates)
+            foreach (var candidate in _candidates)
             {
                 i++;
 
@@ -121,6 +127,7 @@ namespace Avaaj.Dialogs
                 Grid.SetColumn(candidateMethod, 2);
 
                 CheckBox isIncluded = new CheckBox();
+                isIncluded.Name = "Checkbox_" + i.ToString();
                 Grid.SetRow(isIncluded, i);
                 Grid.SetColumn(isIncluded, 3);
 
@@ -147,6 +154,23 @@ namespace Avaaj.Dialogs
             {
                 this.Close();
             };
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var checkboxes = InnerGrid.
+                 Children
+                 .Cast<UIElement>() 
+                 .Where(x => x is CheckBox).Where(y => ((CheckBox)y).IsChecked.Value).ToList();
+            var selectedCandidates = new List<CandidatesModel>();
+            foreach (CheckBox checkbox in checkboxes)
+            {
+                var index = Convert.ToInt16(checkbox.Name.Split('_')[1])-1;
+                selectedCandidates.Add(_candidates[index]);
+            }
+
+            _methodsInspector.GetElementsForScaffolding(selectedCandidates);
+            this.Close();
         }
     }
 }

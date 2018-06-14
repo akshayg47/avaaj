@@ -96,15 +96,14 @@ namespace Avaaj
             TextViewSelection selection = GetSelection(ServiceProvider);
             string activeDocumentName = GetActiveDocumentFileName(ServiceProvider);
             var activeDllPath = GetActiveDocumentAssemblyPath(ServiceProvider);
-            var methodInspector = new MethodsInspector(activeDocumentName, selection.Text, activeDllPath);
-            var candidates = methodInspector.GetAllMethods();
+            var methodInspector = new MethodsInspector(activeDocumentName, selection.Text, activeDllPath);          
 
-            ShowAddTestWindow(candidates, selection);
+            ShowAddTestWindow(methodInspector, selection);
         }
 
-        private void ShowAddTestWindow(List<CandidatesModel> candidates, TextViewSelection selection)
+        private void ShowAddTestWindow(MethodsInspector methodsInspector, TextViewSelection selection)
         {
-            var documentationControl = new AddTestWindow(candidates);
+            var documentationControl = new AddTestWindow(methodsInspector);
             documentationControl.DataContext = new EditViewModel(selection);
             documentationControl.ShowDialog();
         }
