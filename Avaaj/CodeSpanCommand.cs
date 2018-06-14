@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel.Design;
 using System.Globalization;
+using Avaaj.Dialogs;
+using Avaaj.Models;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -91,7 +93,14 @@ namespace Avaaj
         {
             TextViewSelection selection = GetSelection(ServiceProvider);
             string activeDocumentPath = GetActiveDocumentFilePath(ServiceProvider);
-          
+            ShowAddTestWindow(activeDocumentPath, selection);
+        }
+
+        private void ShowAddTestWindow(string activeDocumentPath, TextViewSelection selection)
+        {
+            var documentationControl = new AddTestWindow();
+            documentationControl.DataContext = new EditViewModel(activeDocumentPath, selection);
+            documentationControl.ShowDialog();
         }
 
         private string GetActiveDocumentFilePath(IServiceProvider serviceProvider)
