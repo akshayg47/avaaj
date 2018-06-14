@@ -10,10 +10,8 @@ namespace Avaaj
     {
         public string ContainingClassName { get; set; }
 
-        public string MethodUnderTest { get; set; }
+        public MethodUnderTest MethodUnderTest { get; set; }
 
         public List<string> NameSpacesToBeIncluded { get; set; }
-
-        public List<MethodEntityTobeArranged> MethodsTobeArranged { get; set; }
     }
 }

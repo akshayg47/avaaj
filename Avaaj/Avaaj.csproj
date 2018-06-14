@@ -62,7 +62,8 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>GeneralSettings.settings</DependentUpon>
     </Compile>
-	<Compile Include="Models\TextViewSelection.cs" />
+    <Compile Include="MethodUnderTest.cs" />
+    <Compile Include="Models\TextViewSelection.cs" />
     <Compile Include="CandidatesModel.cs" />
     <Compile Include="MethodEntityTobeArranged.cs" />
     <Compile Include="MethodsInspector.cs" />
