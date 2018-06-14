@@ -15,6 +15,12 @@ namespace WhiteNoise.BusinessImpl
             this.russell = new RussellBusiness();
         }
 
+        public SoundBusiness(IScreamBusiness scream, IRussellBusiness russell)
+        {
+            this.scream = scream;
+            this.russell = russell;
+        }
+
         public void SoundMethod1(int temp)
         {
             var flag = this.scream.ScreamMethod2(temp);
