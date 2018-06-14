@@ -49,18 +49,32 @@ namespace Avaaj
             var details = new ScaffoldingElements
             {
                 ContainingClassName = ContainingClassName,
-                MethodUnderTest = methodUnderTest
+                MethodUnderTest = new MethodUnderTest { MethodName = methodUnderTest, ParameterTypes = new List<string>() }
             };
 
             var namespaces = new HashSet<string>();
-            var methods = GetMethodsCalled(GetMethod(methodUnderTest, ContainingClassName));
+            var methodDefinition = GetMethod(methodUnderTest, ContainingClassName);
+            foreach (var param in methodDefinition.Parameters)
+            {
+                if (param.ParameterType.IsValueType)
+                {
+                    details.MethodUnderTest.ParameterTypes.Add(param.ParameterType.Name);
+                }
+                else
+                {
+                    namespaces.Add(param.ParameterType.Namespace);
+                    details.MethodUnderTest.ParameterTypes.Add(EditParameterName(param.ParameterType.FullName, param.ParameterType.Namespace));
+                }
+            }
+
+            var methods = GetMethodsCalled(methodDefinition);
             methods = methods.Where(m => selectedMethods.Any(s => s.MethodName.ToLower().Equals(m.Name.ToLower())) && selectedMethods.Any(s => s.InterfaceName.ToLower().Equals(m.DeclaringType.Name.ToLower()))).ToList();
-            var toBeArrangedMethods = new List<MethodEntityTobeArranged>();
+            var toBeArrangedMethods = new List<MethodEntityToBeArranged>();
             foreach (var method in methods)
             {
                 if (method.IsPublic)
                 {
-                    var tobeArrangedEntity = new MethodEntityTobeArranged()
+                    var tobeArrangedEntity = new MethodEntityToBeArranged()
                     {
                         InterfaceName = method.DeclaringType.Name,
                         MethodName = method.Name,
@@ -86,7 +100,7 @@ namespace Avaaj
             }
 
             details.NameSpacesToBeIncluded = namespaces.ToList();
-            details.MethodsTobeArranged = toBeArrangedMethods;
+            details.MethodUnderTest.MethodsToBeArranged = toBeArrangedMethods;
             return details;
         }
 
@@ -108,7 +122,8 @@ namespace Avaaj
             return fullyQualifiedName;
         }
 
-        private static IEnumerable<MethodDefinition> GetMethodsCalled(MethodDefinition caller)
+        private static IEnumerable<MethodDefinition> GetMethodsCalled(
+    MethodDefinition caller)
         {
             return caller.Body.Instructions
                 .Where(x => x.OpCode.Value.Equals(OpCodes.Call.Value) || x.OpCode.Value.Equals(OpCodes.Callvirt.Value))

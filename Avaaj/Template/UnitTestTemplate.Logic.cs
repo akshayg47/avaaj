@@ -15,11 +15,13 @@ namespace Avaaj.Template
         public string ContainingClassName { get; set; }
         public string TestClassName { get; set; }
         public string ContainingNamespace { get; set; }
+        public string ClassUnderTest { get; set; }
 
         public UnitTestTemplate(ScaffoldingElements properties)
         {
             _classProperties = properties;
-            ContainingNamespace = _classProperties.ContainingNamespace;
+            ClassUnderTest = _classProperties.ContainingClassName;
+            ContainingNamespace = $"{_classProperties.ContainingClassName}.Test";
             ContainingClassName = _classProperties.ContainingClassName;
             TestClassName = $"{_classProperties.ContainingClassName}Test";
         }
@@ -40,7 +42,7 @@ namespace Avaaj.Template
             var sb = new StringBuilder();
             var method = _classProperties.MethodUnderTest;
             
-            sb.AppendLine(WriteMethodSummary(method));
+            sb.AppendLine(WriteMethodSummary(method.MethodName));
             sb.AppendFormat("{0}[Fact]\n", tabs);
             sb.AppendFormat("{0}public void {1}_Success()\n", tabs, method.MethodName);
             sb.AppendFormat("{0}",tabs);
