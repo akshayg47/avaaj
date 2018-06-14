@@ -7,6 +7,8 @@ using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TextManager.Interop;
+using System.IO;
+using System.Collections.Generic;
 
 namespace Avaaj
 {
@@ -92,21 +94,34 @@ namespace Avaaj
         private void MenuItemCallback(object sender, EventArgs e)
         {
             TextViewSelection selection = GetSelection(ServiceProvider);
-            string activeDocumentPath = GetActiveDocumentFilePath(ServiceProvider);
-            ShowAddTestWindow(activeDocumentPath, selection);
+            string activeDocumentName = GetActiveDocumentFileName(ServiceProvider);
+            var activeDllPath = GetActiveDocumentAssemblyPath(ServiceProvider);
+            var methodInspector = new MethodsInspector(activeDocumentName, selection.Text, activeDllPath);
+            var candidates = methodInspector.GetAllMethods();
+
+            ShowAddTestWindow(candidates, selection);
         }
 
-        private void ShowAddTestWindow(string activeDocumentPath, TextViewSelection selection)
+        private void ShowAddTestWindow(List<CandidatesModel> candidates, TextViewSelection selection)
         {
             var documentationControl = new AddTestWindow();
-            documentationControl.DataContext = new EditViewModel(activeDocumentPath, selection);
+            documentationControl.DataContext = new EditViewModel(candidates, selection);
             documentationControl.ShowDialog();
         }
 
-        private string GetActiveDocumentFilePath(IServiceProvider serviceProvider)
+        private string GetActiveDocumentAssemblyPath(IServiceProvider serviceProvider)
         {
             EnvDTE80.DTE2 applicationObject = serviceProvider.GetService(typeof(DTE)) as EnvDTE80.DTE2;
-            return applicationObject.ActiveDocument.FullName;
+            var projFileName = Path.GetFileName(applicationObject.ActiveDocument.ProjectItem.ContainingProject.FileName);
+
+            return Path.GetDirectoryName(applicationObject.ActiveDocument.Path) + "\\bin\\debug\\"
+                + projFileName.Substring(0, projFileName.LastIndexOf('.')) + ".dll";
+        }
+
+        private string GetActiveDocumentFileName(IServiceProvider serviceProvider)
+        {
+            EnvDTE80.DTE2 applicationObject = serviceProvider.GetService(typeof(DTE)) as EnvDTE80.DTE2;
+            return applicationObject.ActiveDocument.Name.Split('.')[0];
 
         }
 

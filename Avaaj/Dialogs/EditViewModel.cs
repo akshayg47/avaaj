@@ -2,6 +2,7 @@
 using Avaaj.Models;
 using Avaaj.Utils.WPFUtils;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -14,7 +15,7 @@ namespace Avaaj.Dialogs
         public enum AddTestResult { Cancel, Generate }
         public AddTestResult Result { get; set; }
         public IEventAggregator EventAggregator { get; set; }
-        private string _documentPath;
+        private List<CandidatesModel> candidates;
         private TextViewSelection _selection;
         public event Action CloseRequest;
 
@@ -23,9 +24,9 @@ namespace Avaaj.Dialogs
           //  EventAggregator = VisualStudioServices.ComponentModel.GetService<IEventAggregator>();
         }
 
-        public EditViewModel(string documentPath, TextViewSelection selection) : this()
+        public EditViewModel(List<CandidatesModel> candidates, TextViewSelection selection) : this()
         {
-            this._documentPath = documentPath;
+            this.candidates = candidates;
             this._selection= selection;
         }
 
