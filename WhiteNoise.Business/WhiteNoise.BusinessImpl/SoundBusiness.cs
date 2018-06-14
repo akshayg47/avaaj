@@ -14,7 +14,7 @@ namespace WhiteNoise.BusinessImpl
             this.scream = new ScreamBusiness();
             this.russell = new RussellBusiness();
         }
-
+        
         public SoundBusiness(IScreamBusiness scream, IRussellBusiness russell)
         {
             this.scream = scream;
@@ -32,6 +32,8 @@ namespace WhiteNoise.BusinessImpl
 
             if (value == 100)
                 this.scream.ScreamMethod1();
+
+            this.SoundMethod2(null);
         }
 
         public TheNewEntity SoundMethod2(TheOldEntity old)
