@@ -1,4 +1,5 @@
-﻿using Mono.Cecil;
+﻿using Avaaj.Template;
+using Mono.Cecil;
 using Mono.Cecil.Cil;
 using System;
 using System.Collections.Generic;
@@ -60,7 +61,7 @@ namespace Avaaj
 
         public ScaffoldingElements GetElementsForScaffolding(List<CandidatesModel> candidates)
         {
-            var selectedMethods = candidates.Where(s => s.IsSelected.Equals(true)).ToList();
+            var selectedMethods = candidates;
             var details = new ScaffoldingElements
             {
                 ContainingClassName = ContainingClassName,
@@ -113,6 +114,8 @@ namespace Avaaj
 
             details.NameSpacesToBeIncluded = namespaces.ToList();
             details.MethodUnderTest.MethodsToBeArranged = toBeArrangedMethods;
+            UnitTestTemplate unitTestTemplate = new UnitTestTemplate(details);
+            unitTestTemplate.WriteFile();
             return details;
         }
 

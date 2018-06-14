@@ -53,7 +53,7 @@
         </Border>
         <Border Grid.Row="3" Background="#FFE1E1E1" Padding="5">
             <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Margin="5" Padding="5" Command="{Binding GenerateCommand}" >Generate</Button>
+                <Button Margin="5" Padding="5" Command="{Binding GenerateCommand}" Click="Button_Click" >Generate</Button>
                 <Button Margin="5" Padding="5" Command="{Binding CancelCommand}">Cancel</Button>
             </StackPanel>
         </Border>
