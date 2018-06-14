@@ -73,9 +73,15 @@ namespace ");
             #line default
             #line hidden
             this.Write("\r\n    {\r\n        /// <summary>\r\n        /// List of parameter types in the larges" +
-                    "t <see cref=\"AdminGroupsDirectoryBusiness\"/> constructor in terms of number of p" +
-                    "arams\r\n        /// </summary>\r\n        private static readonly Type[] CtorParamT" +
-                    "ypes = typeof(");
+                    "t <see cref=\"");
+            
+            #line 29 "C:\avaaj\Avaaj\Template\UnitTestTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(ClassUnderTest));
+            
+            #line default
+            #line hidden
+            this.Write("\"/> constructor in terms of number of params\r\n        /// </summary>\r\n        pri" +
+                    "vate static readonly Type[] CtorParamTypes = typeof(");
             
             #line 31 "C:\avaaj\Avaaj\Template\UnitTestTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ClassUnderTest));

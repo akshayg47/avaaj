@@ -13,7 +13,7 @@ namespace Avaaj.Template
         private readonly ScaffoldingElements _classProperties;
 
         private List<string> _methodParameters;
-        
+
         private static List<string> valueTypes = new List<string> { "bool",
                                                                     "byte",
                                                                     "char",
@@ -28,7 +28,8 @@ namespace Avaaj.Template
                                                                     "struct",
                                                                     "uint",
                                                                     "ulong",
-                                                                    "ushort"
+                                                                    "ushort",
+                                                                    "string"
                                                                   };
 
         public string TestClassName { get; set; }
@@ -57,30 +58,34 @@ namespace Avaaj.Template
         public string WriteMethodTest()
         {
             var tabs = AddTabs(2);
+            var tabs3 = AddTabs(3);
+            var tabs4 = AddTabs(4);
+
             var sb = new StringBuilder();
             var method = _classProperties.MethodUnderTest;
-            
+
             sb.AppendLine(WriteMethodSummary(method.MethodName));
             sb.AppendFormat("{0}[Fact]\n", tabs);
             sb.AppendFormat("{0}public void {1}_Success()\n", tabs, method.MethodName);
-            sb.AppendFormat("{0}",tabs);
-            sb.Append("{\n");
-            sb.AppendFormat("{0}using (var container = CreateMockingContainer())\n", tabs);
             sb.AppendFormat("{0}", tabs);
             sb.Append("{\n");
-            sb.AppendFormat("{0}\t//Arrange\n", tabs);
+            sb.AppendFormat("{0}using (var container = CreateMockingContainer())\n", tabs3);
+            sb.AppendFormat("{0}", tabs3);
+            sb.Append("{\n");
+            sb.AppendFormat("{0}//Arrange\n", tabs4);
             sb.AppendLine(WriteTypeDeclarations(method.ParameterTypes));
-            sb.AppendLine(WriteArrangeStatements(method.MethodsToBeArranged));                
+            sb.AppendLine(WriteArrangeStatements(method.MethodsToBeArranged));
 
-            sb.AppendFormat("{0}\t//Act\n", tabs);
-            sb.AppendLine(WriteTestMethodCall(method.MethodName)); 
+            sb.AppendFormat("{0}//Act\n", tabs4);
+            sb.AppendLine(WriteTestMethodCall(method.MethodName));
 
-            sb.AppendFormat("{0}\t//Assert\n", tabs);
-            sb.AppendFormat("{0}\tcontainer.AssertAll();\n", tabs);
+            sb.AppendFormat("{0}//Assert\n", tabs4);
+            sb.AppendFormat("{0}container.AssertAll();\n", tabs4);
+            sb.AppendFormat("{0}", tabs3);
+            sb.Append("}\n");
             sb.AppendFormat("{0}", tabs);
             sb.Append("}\n");
-            sb.Append("}\n");
-            
+
 
             return sb.ToString();
         }
@@ -97,37 +102,39 @@ namespace Avaaj.Template
 
         public string WriteTypeDeclarations(List<string> parameterTypes)
         {
-            var sb = new StringBuilder();
             int count = 1;
+            var tabs = AddTabs(4);
+            var sb = new StringBuilder();
             foreach (var type in parameterTypes)
             {
                 var isValueType = valueTypes.Contains(type);
                 var variableName = $"v{type}{count++}";
                 if (isValueType)
                 {
-                    sb.AppendFormat("{0} {1};\n", type, variableName);
+                    sb.AppendFormat("{0}{1} {2};\n", tabs, type, variableName);
                 }
                 else
                 {
-                    sb.AppendFormat("{0} {1} = new {2}();\n", "var", variableName, type);
+                    sb.AppendFormat("{0}{1} {2} = new {3}();\n", tabs, "var", variableName, type);
                 }
-                sb.AppendLine(variableName);
+
                 _methodParameters.Add(variableName);
             }
-            sb.AppendLine(string.Empty);
 
             return sb.ToString();
         }
 
         public string WriteArrangeStatements(List<MethodEntityToBeArranged> calls)
         {
+            var tabs = AddTabs(4);
             var sb = new StringBuilder();
             foreach (var method in calls)
             {
                 var variableName = $"{method.InterfaceName[1].ToString().ToLower()}{method.InterfaceName.Substring(2)}";
                 var parameters = GetMethodParameters(method.ParameterTypes);
                 sb.AppendFormat(
-                    "\t\t\tcontainer.Arrange<{0}>({1} => {1}.{2}({3})).DoNothing();\n",
+                    "{0}container.Arrange<{1}>({2} => {2}.{3}({4})).DoNothing();\n",
+                    tabs,
                     method.InterfaceName,
                     variableName,
                     method.MethodName,
@@ -138,10 +145,10 @@ namespace Avaaj.Template
         }
 
         public void WriteFile()
-        {           
+        {
             string fileName = $"{ClassUnderTest}Test.cs";
             string directory = Path.Combine(Directory.GetCurrentDirectory(), "Output");
-            
+
             if (!Directory.Exists(directory))
             {
                 Directory.CreateDirectory(directory);
@@ -157,31 +164,33 @@ namespace Avaaj.Template
             {
                 var pageContent = TransformText();
                 File.WriteAllText(filePath, pageContent);
-            }           
+            }
         }
 
         private string WriteTestMethodCall(string methodName)
         {
-            var tabs = AddTabs(3);
+            var tabs = AddTabs(4);
             var sb = new StringBuilder();
-            sb.AppendFormat("{0}container.Instance.{1}({2});\n\n", tabs, methodName, string.Join(",", _methodParameters));
+            sb.AppendFormat("{0}container.Instance.{1}({2});\n", tabs, methodName, string.Join(", ", _methodParameters));
             return sb.ToString();
         }
 
         private StringBuilder AppendMethodToFile(string filePath)
         {
             var searchKey = "/// <summary>";
-            var textLines = File.ReadAllLines(filePath);
-            var insertIndex = textLines.ToList().LastIndexOf(searchKey);
+            var textLines = File.ReadAllLines(filePath).ToList();
+            var insertIndex = textLines.FindLastIndex(line => line.Contains(searchKey));
             var sb = new StringBuilder();
             for (int l = 0; l < insertIndex; l++)
             {
-                sb.Append(textLines[l]);
+                sb.AppendFormat("{0}\n", textLines[l]);
             }
-            sb.AppendLine(WriteMethodTest());
-            for (int l = insertIndex; l < textLines.Length; l++)
+
+            sb.AppendFormat("{0}\n", WriteMethodTest());
+
+            for (int l = insertIndex; l < textLines.Count; l++)
             {
-                sb.Append(textLines[l]);
+                sb.AppendFormat("{0}\n", textLines[l]);
             }
 
             return sb;
@@ -191,20 +200,20 @@ namespace Avaaj.Template
         {
             var sb = new StringBuilder();
             var arguments = parameterTypes.Select(p => $"Arg.IsAny<{p}>()").ToList();
-            sb.Append(string.Join(",", arguments));
+            sb.Append(string.Join(", ", arguments));
             return sb.ToString();
         }
 
         private string AddTabs(int numOfTabs)
         {
             var sb = new StringBuilder();
-            for(int i=0; i<numOfTabs; i++)
+            for (int i = 0; i < numOfTabs; i++)
             {
                 sb.Append("\t");
             }
 
             return sb.ToString();
         }
-      
+
     }
 }
