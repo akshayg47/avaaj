@@ -1,0 +1,65 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="<#=TestClassName#>.cs" company="VMWare">
+//   Copyright © 2018 VMware, Inc. All rights reserved.
+//   This product is protected by copyright and intellectual property laws in the United States and other countries as well as by international treaties.
+//   AirWatch products may be covered by one or more patents listed at http://www.vmware.com/go/patents
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace <#=ContainingNamespace#>
+{
+    using System;
+	using Xunit;
+	using Telerik.JustMock;
+    using Telerik.JustMock.AutoMock;
+<#=WriteUsingStatements()#>
+
+    /// <summary>
+    /// Unit tests for <#=ClassUnderTest#>
+    /// </summary>    
+    [Trait("Mocking", "Basic")]
+    public class <#=TestClassName#>
+    {
+        /// <summary>
+        /// List of parameter types in the largest <see cref="AdminGroupsDirectoryBusiness"/> constructor in terms of number of params
+        /// </summary>
+        private static readonly Type[] CtorParamTypes = typeof(<#=ClassUnderTest#>).GetConstructors().
+																					OrderByDescending(ctor => ctor.GetParameters().Length).
+																					FirstOrDefault()?.
+																					GetParameters().
+																					Select(param => param.ParameterType).
+																					ToArray();
+		
+		/// <summary>
+        /// Initializes a new instance of the <see cref="<#=TestClassName#>"/> class.
+        /// </summary>
+        public <#=TestClassName#>()
+        {
+            WellKnownObjects.EnvironmentSettings = new EnvironmentSettings
+            {
+                DeploymentMode = DeploymentMode.Test
+            };
+        }
+
+<#=WriteMethodTest()#>        
+
+        /// <summary>
+        /// Generates mocked container of the <#=ClassUnderTest#> class' constructor
+        /// </summary>
+        /// <returns>MockingContainer of type <#=ClassUnderTest#></returns>
+        private MockingContainer<<#=ClassUnderTest#>> CreateMockingContainer()
+        {
+            var mockingContainer = new MockingContainer<<#=ClassUnderTest#>>(new AutoMockSettings()
+            {
+                ConstructorArgTypes = CtorParamTypes
+            });
+
+            return mockingContainer;
+        }
+    }
+}
