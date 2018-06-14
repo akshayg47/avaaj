@@ -1,16 +1,9 @@
 ﻿using Avaaj.Events;
 using Avaaj.Models;
-using Avaaj.Services;
-using Avaaj.Utils;
 using Avaaj.Utils.WPFUtils;
-
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -20,14 +13,9 @@ namespace Avaaj.Dialogs
     {
         public enum AddTestResult { Cancel, Generate }
         public AddTestResult Result { get; set; }
-
-
         public IEventAggregator EventAggregator { get; set; }
         private string _documentPath;
         private TextViewSelection _selection;
-        bool _existingTest = false;
-        private string _selectionText;
-
         public event Action CloseRequest;
 
         private EditViewModel()
@@ -41,10 +29,7 @@ namespace Avaaj.Dialogs
             this._selection= selection;
         }
 
-        public string SelectionText => _existingTest ? _selectionText : _selection.Text;
-              
-
-        public bool IsExistingDocumentation => _existingTest;
+        public string SelectionText => _selection.Text;             
 
         public ICommand _cancelCommand;
         public ICommand CancelCommand
@@ -77,31 +62,9 @@ namespace Avaaj.Dialogs
         }
 
         private void GenerateTest(object obj)
-        {
-          
-            if (_existingTest)
-            {
-                Result = AddTestResult.Generate;
-                CloseRequest?.Invoke();
-                return;
-            }
-
-          //  var newDocFragment = new DocumentationFragment()
-            //{
-            //    Documentation = DocumentationText,
-            //    Selection = this._selection,
-            //};
+        {                      
             try
-            {
-                //string filepath = this._documentPath + Consts.CODY_DOCS_EXTENSION;
-                //DocumentationFileHandler.AddDocumentationFragment(newDocFragment, filepath);
-                //MessageBox.Show("Documentation added successfully.");
-                //EventAggregator.SendMessage<DocumentationAddedEvent>(
-                //    new DocumentationAddedEvent()
-                //    {
-                //        Filepath = filepath,
-                //        DocumentationFragment = newDocFragment
-                //    });
+            {                
                 Result = AddTestResult.Generate;
                 CloseRequest?.Invoke();
             }
