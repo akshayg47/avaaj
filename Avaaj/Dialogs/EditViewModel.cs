@@ -2,6 +2,7 @@
 using Avaaj.Models;
 using Avaaj.Utils.WPFUtils;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -14,7 +15,7 @@ namespace Avaaj.Dialogs
         public enum AddTestResult { Cancel, Generate }
         public AddTestResult Result { get; set; }
         public IEventAggregator EventAggregator { get; set; }
-        private string _documentPath;
+        public List<CandidatesModel> Candidates;
         private TextViewSelection _selection;
         public event Action CloseRequest;
 
@@ -24,8 +25,7 @@ namespace Avaaj.Dialogs
         }
 
         public EditViewModel(string documentPath, TextViewSelection selection) : this()
-        {
-            this._documentPath = documentPath;
+        {           
             this._selection= selection;
         }
 
@@ -66,6 +66,8 @@ namespace Avaaj.Dialogs
             try
             {                
                 Result = AddTestResult.Generate;
+
+
                 CloseRequest?.Invoke();
             }
             catch (Exception ex)
