@@ -30,7 +30,7 @@
             <Setter Property="Padding" Value="2 4"/>
         </Style>
     </Window.Resources>
-    <Grid>
+    <Grid Name="MyGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -46,11 +46,16 @@
                          />
             </StackPanel>
         </Border>
+        <Border Grid.Row="2" Background="#FFE1E1E1" Padding="5">
+            <Grid Name="InnerGrid">
+                
+            </Grid>
+        </Border>
         <Border Grid.Row="3" Background="#FFE1E1E1" Padding="5">
             <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Margin="5" Padding="5" Command="{Binding GenerateCommand}" >Generate</Button>
                 <Button Margin="5" Padding="5" Command="{Binding CancelCommand}">Cancel</Button>
             </StackPanel>
-        </Border>            
+        </Border>
     </Grid>
 </local:BaseDialogWindow>

@@ -104,8 +104,8 @@ namespace Avaaj
 
         private void ShowAddTestWindow(List<CandidatesModel> candidates, TextViewSelection selection)
         {
-            var documentationControl = new AddTestWindow();
-            documentationControl.DataContext = new EditViewModel(candidates, selection);
+            var documentationControl = new AddTestWindow(candidates);
+            documentationControl.DataContext = new EditViewModel(selection);
             documentationControl.ShowDialog();
         }
 
