@@ -62,7 +62,11 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>GeneralSettings.settings</DependentUpon>
     </Compile>
+    <Compile Include="CandidatesModel.cs" />
+    <Compile Include="MethodEntityTobeArranged.cs" />
+    <Compile Include="MethodsInspector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScaffoldingElements.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
