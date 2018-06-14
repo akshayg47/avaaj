@@ -48,8 +48,8 @@
       <Group guid="guidCommand1PackageCmdSet" id="MyMenuGroup" priority="0x0600">
         <Parent guid="guidCommand1PackageCmdSet" id="TopLevelMenu" />
       </Group>
-      <Group guid="guidCommand1PackageCmdSet1" id="MyMenuGroup" priority="0x0600">
-        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS" />
+      <Group guid="guidCommand1PackageCmdSet1" id="EditorContextMenuGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN" />
       </Group>
     </Groups>
 
@@ -72,10 +72,9 @@
         </Strings>
       </Button>
       <Button guid="guidCommand1PackageCmdSet1" id="cmdidCodeSpanCommand" priority="0x0100" type="Button">
-        <Parent guid="guidCommand1PackageCmdSet1" id="MyMenuGroup" />
-        <Icon guid="guidImages1" id="bmpPic1" />
+        <Parent guid="guidCommand1PackageCmdSet1" id="EditorContextMenuGroup" />       
         <Strings>
-          <ButtonText>Invoke CodeSpanCommand</ButtonText>
+          <ButtonText>Add Unit Test</ButtonText>
         </Strings>
       </Button>
     </Buttons>
@@ -88,8 +87,7 @@
             inside a button definition. An important aspect of this declaration is that the element id
             must be the actual index (1-based) of the bitmap inside the bitmap strip. -->
       <Bitmap guid="guidImages" href="Resources\Command1.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
-      <Bitmap guid="guidImages1" href="Resources\CodeSpanCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
-    </Bitmaps>
+      </Bitmaps>
   </Commands>
 
   <Symbols>
@@ -113,17 +111,8 @@
     </GuidSymbol>
   
     <GuidSymbol value="{187c712d-ea69-463c-8013-ed2b1ba89cf8}" name="guidCommand1PackageCmdSet1">
-      <IDSymbol value="4128" name="MyMenuGroup" />
+      <IDSymbol value="4128" name="EditorContextMenuGroup" />
       <IDSymbol value="256" name="cmdidCodeSpanCommand" />
-    </GuidSymbol>
-  
-    <GuidSymbol value="{39116d94-6255-4647-a619-231ccd1c6f9a}" name="guidImages1">
-      <IDSymbol name="bmpPic1" value="1" />
-      <IDSymbol name="bmpPic2" value="2" />
-      <IDSymbol name="bmpPicSearch" value="3" />
-      <IDSymbol name="bmpPicX" value="4" />
-      <IDSymbol name="bmpPicArrows" value="5" />
-      <IDSymbol name="bmpPicStrikethrough" value="6" />
-    </GuidSymbol>
+    </GuidSymbol>    
   </Symbols>
 </CommandTable>

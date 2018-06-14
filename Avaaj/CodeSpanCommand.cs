@@ -1,8 +1,10 @@
 ﻿using System;
 using System.ComponentModel.Design;
 using System.Globalization;
+using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio.TextManager.Interop;
 
 namespace Avaaj
 {
@@ -87,17 +89,37 @@ namespace Avaaj
         /// <param name="e">Event args.</param>
         private void MenuItemCallback(object sender, EventArgs e)
         {
-            string message = string.Format(CultureInfo.CurrentCulture, "Inside {0}.MenuItemCallback()", this.GetType().FullName);
-            string title = "CodeSpanCommand";
+            TextViewSelection selection = GetSelection(ServiceProvider);
+            string activeDocumentPath = GetActiveDocumentFilePath(ServiceProvider);
+          
+        }
 
-            // Show a message box to prove we were here
-            VsShellUtilities.ShowMessageBox(
-                this.ServiceProvider,
-                message,
-                title,
-                OLEMSGICON.OLEMSGICON_INFO,
-                OLEMSGBUTTON.OLEMSGBUTTON_OK,
-                OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+        private string GetActiveDocumentFilePath(IServiceProvider serviceProvider)
+        {
+            EnvDTE80.DTE2 applicationObject = serviceProvider.GetService(typeof(DTE)) as EnvDTE80.DTE2;
+            return applicationObject.ActiveDocument.FullName;
+
+        }
+
+        private TextViewSelection GetSelection(IServiceProvider serviceProvider)
+        {
+            var service = serviceProvider.GetService(typeof(SVsTextManager));
+            var textManager = service as IVsTextManager2;
+            IVsTextView view;
+            int result = textManager.GetActiveView2(1, null, (uint)_VIEWFRAMETYPE.vftCodeWindow, out view);
+
+            view.GetSelection(out int startLine, out int startColumn, out int endLine, out int endColumn);//end could be before beginning
+
+            int ok = view.GetNearestPosition(startLine, startColumn, out int position1, out int piVirtualSpaces);
+            ok = view.GetNearestPosition(endLine, endColumn, out int position2, out piVirtualSpaces);
+
+            var startPosition = Math.Min(position1, position2);
+            var endPosition = Math.Max(position1, position2);
+
+            view.GetSelectedText(out string selectedText);
+
+            TextViewSelection selection = new TextViewSelection(startPosition, endPosition, selectedText);
+            return selection;
         }
     }
 }
