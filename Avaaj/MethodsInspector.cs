@@ -1,25 +1,40 @@
 ﻿using Mono.Cecil;
 using Mono.Cecil.Cil;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace Avaaj
 {
     public class MethodsInspector
     {
-        private static AssemblyDefinition _assembly = AssemblyDefinition.ReadAssembly(
-        System.Reflection.Assembly.GetExecutingAssembly().Location);
-
+        Assembly SampleAssembly;
+        private static AssemblyDefinition _assembly;
         private string ContainingClassName;
-
         private string methodUnderTest;
 
-        public MethodsInspector(string className, string methodTest)
+        public MethodsInspector(string className, string methodTest, string dllPath)
         {
             ContainingClassName = className;
             methodUnderTest = methodTest;
+            SampleAssembly = System.Reflection.Assembly.LoadFrom(dllPath);
+            _assembly = AssemblyDefinition.ReadAssembly(SampleAssembly.Location);
         }
+
+        //private static AssemblyDefinition _assembly = AssemblyDefinition.ReadAssembly(
+        //System.Reflection.Assembly.GetExecutingAssembly().Location);
+
+        //private string ContainingClassName;
+
+        //private string methodUnderTest;
+
+        //public MethodsInspector(string className, string methodTest)
+        //{
+        //    ContainingClassName = className;
+        //    methodUnderTest = methodTest;
+        //}
 
         public List<CandidatesModel> GetAllMethods()
         {
@@ -27,7 +42,7 @@ namespace Avaaj
             var candidates = new List<CandidatesModel>();
             foreach (var method in methods)
             {
-                if (method.IsPublic)
+                if (!method.IsDefinition)
                 {
                     var candidate = new CandidatesModel()
                     {
@@ -72,31 +87,28 @@ namespace Avaaj
             var toBeArrangedMethods = new List<MethodEntityToBeArranged>();
             foreach (var method in methods)
             {
-                if (method.IsPublic)
+                var tobeArrangedEntity = new MethodEntityToBeArranged()
                 {
-                    var tobeArrangedEntity = new MethodEntityToBeArranged()
-                    {
-                        InterfaceName = method.DeclaringType.Name,
-                        MethodName = method.Name,
-                        ParameterTypes = new List<string>()
-                    };
+                    InterfaceName = method.DeclaringType.Name,
+                    MethodName = method.Name,
+                    ParameterTypes = new List<string>()
+                };
 
-                    namespaces.Add(method.DeclaringType.Namespace);
-                    foreach (var param in method.Parameters)
+                namespaces.Add(method.DeclaringType.Namespace);
+                foreach (var param in method.Parameters)
+                {
+                    if (param.ParameterType.IsValueType)
                     {
-                        if (param.ParameterType.IsValueType)
-                        {
-                            tobeArrangedEntity.ParameterTypes.Add(param.ParameterType.Name);
-                        }
-                        else
-                        {
-                            namespaces.Add(param.ParameterType.Namespace);
-                            tobeArrangedEntity.ParameterTypes.Add(EditParameterName(param.ParameterType.FullName, param.ParameterType.Namespace));
-                        }
+                        tobeArrangedEntity.ParameterTypes.Add(param.ParameterType.Name);
                     }
-
-                    toBeArrangedMethods.Add(tobeArrangedEntity);
+                    else
+                    {
+                        namespaces.Add(param.ParameterType.Namespace);
+                        tobeArrangedEntity.ParameterTypes.Add(EditParameterName(param.ParameterType.FullName, param.ParameterType.Namespace));
+                    }
                 }
+
+                toBeArrangedMethods.Add(tobeArrangedEntity);
             }
 
             details.NameSpacesToBeIncluded = namespaces.ToList();
@@ -122,18 +134,19 @@ namespace Avaaj
             return fullyQualifiedName;
         }
 
-        private static IEnumerable<MethodDefinition> GetMethodsCalled(
+        private static IEnumerable<MethodReference> GetMethodsCalled(
     MethodDefinition caller)
         {
-            return caller.Body.Instructions
-                .Where(x => x.OpCode.Value.Equals(OpCodes.Call.Value) || x.OpCode.Value.Equals(OpCodes.Callvirt.Value))
-                .Select(x => (MethodDefinition)x.Operand);
+            var s = caller.Body.Instructions
+                .Where(x => x.OpCode.Value.Equals(OpCodes.Call.Value) || x.OpCode.Value.Equals(OpCodes.Callvirt.Value)).ToList();
+            //.Select(x => (MethodDefinition)x.Operand);
+            return s.Select(x => (MethodReference)x.Operand);
         }
 
         private static MethodDefinition GetMethod(string name, string documentName)
         {
             TypeDefinition programType = _assembly.MainModule.Types
-                .FirstOrDefault(x => x.Name == documentName);
+                .FirstOrDefault(x => x.Name.Equals(documentName, StringComparison.OrdinalIgnoreCase));
             return programType.Methods.First(x => x.Name == name);
         }
     }

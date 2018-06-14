@@ -15,7 +15,7 @@ namespace Avaaj.Dialogs
         public enum AddTestResult { Cancel, Generate }
         public AddTestResult Result { get; set; }
         public IEventAggregator EventAggregator { get; set; }
-        public List<CandidatesModel> Candidates;
+        public List<CandidatesModel> Candidates { get; set; }
         private TextViewSelection _selection;
         public event Action CloseRequest;
 
@@ -24,8 +24,8 @@ namespace Avaaj.Dialogs
           //  EventAggregator = VisualStudioServices.ComponentModel.GetService<IEventAggregator>();
         }
 
-        public EditViewModel(string documentPath, TextViewSelection selection) : this()
-        {           
+        public EditViewModel(TextViewSelection selection) : this()
+        {            
             this._selection= selection;
         }
 
@@ -64,10 +64,10 @@ namespace Avaaj.Dialogs
         private void GenerateTest(object obj)
         {                      
             try
-            {                
+            {
+          
+
                 Result = AddTestResult.Generate;
-
-
                 CloseRequest?.Invoke();
             }
             catch (Exception ex)

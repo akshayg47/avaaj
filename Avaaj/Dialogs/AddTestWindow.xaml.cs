@@ -21,12 +21,10 @@ namespace Avaaj.Dialogs
     /// </summary>
     public partial class AddTestWindow
     {
-        public AddTestWindow()
+        public AddTestWindow(List<CandidatesModel> candidates)
         {
             InitializeComponent();
-            this.Loaded += OnLoaded;
-
-            var candidates = (DataContext as EditViewModel).Candidates;           
+            this.Loaded += OnLoaded;                    
 
             InnerGrid.ShowGridLines = true;
 
