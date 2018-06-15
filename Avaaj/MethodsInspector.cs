@@ -19,39 +19,32 @@ namespace Avaaj
         {
             ContainingClassName = className;
             methodUnderTest = methodTest;
-            SampleAssembly = System.Reflection.Assembly.LoadFrom(dllPath);
+            SampleAssembly = Assembly.LoadFrom(dllPath);
             _assembly = AssemblyDefinition.ReadAssembly(SampleAssembly.Location);
         }
-
-        //private static AssemblyDefinition _assembly = AssemblyDefinition.ReadAssembly(
-        //System.Reflection.Assembly.GetExecutingAssembly().Location);
-
-        //private string ContainingClassName;
-
-        //private string methodUnderTest;
-
-        //public MethodsInspector(string className, string methodTest)
-        //{
-        //    ContainingClassName = className;
-        //    methodUnderTest = methodTest;
-        //}
-
+        
         public List<CandidatesModel> GetAllMethods()
         {
             var methods = GetMethodsCalled(GetMethod(methodUnderTest, ContainingClassName));
             var candidates = new List<CandidatesModel>();
+
+            var listOfInterfaces = GetConstructorInjections(ContainingClassName);
+
             foreach (var method in methods)
             {
                 if (!method.IsDefinition)
                 {
-                    var candidate = new CandidatesModel()
+                    if (listOfInterfaces.Contains(method.DeclaringType.Name))
                     {
-                        InterfaceName = method.DeclaringType.Name,
-                        MethodName = method.Name,
-                        IsSelected = false
-                    };
+                        var candidate = new CandidatesModel()
+                        {
+                            InterfaceName = method.DeclaringType.Name,
+                            MethodName = method.Name,
+                            IsSelected = false
+                        };
 
-                    candidates.Add(candidate);
+                        candidates.Add(candidate);
+                    }
                 }
             }
 
@@ -148,6 +141,22 @@ namespace Avaaj
             TypeDefinition programType = _assembly.MainModule.Types
                 .FirstOrDefault(x => x.Name.Equals(documentName, StringComparison.OrdinalIgnoreCase));
             return programType.Methods.First(x => x.Name == name);
+        }
+
+        private static List<string> GetConstructorInjections(string documentName)
+        {
+            try
+            {
+                TypeDefinition programType = _assembly.MainModule.Types
+                .FirstOrDefault(x => x.Name.Equals(documentName, StringComparison.OrdinalIgnoreCase));
+                return programType.Methods.Where(x => x.IsConstructor)
+                    .OrderByDescending(x => x.Parameters.Count)
+                    .First().Parameters.Select(x => x.ParameterType.Name).ToList();
+            }
+            catch (Exception)
+            {
+                return new List<string>();
+            }
         }
     }
 }
