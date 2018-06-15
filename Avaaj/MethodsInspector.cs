@@ -58,7 +58,7 @@ namespace Avaaj
             var selectedMethods = candidates;
             var details = new ScaffoldingElements
             {
-                ContainingClassName = ContainingClassName,
+                ContainingClassName = GetClassName(ContainingClassName),
                 MethodUnderTest = new MethodUnderTest { MethodName = methodUnderTest, ParameterTypes = new List<string>() }
             };
 
@@ -161,6 +161,13 @@ namespace Avaaj
             {
                 return new List<string>();
             }
+        }
+
+        private static string GetClassName(string documentName)
+        {
+            TypeDefinition programType = _assembly.MainModule.Types
+                .FirstOrDefault(x => x.Name.Equals(documentName, StringComparison.OrdinalIgnoreCase));
+            return programType?.Name.ToString();
         }
     }
 }
