@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using WhiteNoise.Business;
 
 namespace WhiteNoise.BusinessImpl
@@ -32,8 +33,9 @@ namespace WhiteNoise.BusinessImpl
 
             if (value == 100)
                 this.scream.ScreamMethod1();
-
-            this.SoundMethod2(null);
+            
+            this.russell.RussellMethodComplex3(new List<string>());
+            this.russell.RussellMethodComplex4(new List<TheOldEntity>(), new Dictionary<string, string>());
         }
 
         public TheNewEntity SoundMethod2(TheOldEntity old)
