@@ -26,8 +26,7 @@ namespace WhiteNoise.BusinessImpl
         {
             var flag = this.scream.ScreamMethod2(temp);
 
-            if (flag)
-                this.russell.RussellMethod1();
+            this.russell.RussellMethod1();
 
             var value = InternalSoundMethod();
 

@@ -18,7 +18,7 @@ namespace WhiteNoise.BusinessImpl
 
         public bool ScreamMethod2(int temp)
         {
-            return temp > 10;
+            return temp < 10;
         }
 
         private void InternalScreamMethod(int temp)
