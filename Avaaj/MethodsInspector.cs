@@ -15,7 +15,8 @@ namespace Avaaj
         private static AssemblyDefinition _assembly;
         private string ContainingClassName;
         private string methodUnderTest;
-
+        public string SolutionFilePath { get; set; }
+        
         public MethodsInspector(string className, string methodTest, string dllPath)
         {
             ContainingClassName = className;
@@ -115,7 +116,7 @@ namespace Avaaj
             details.NameSpacesToBeIncluded = namespaces.ToList();
             details.MethodUnderTest.MethodsToBeArranged = toBeArrangedMethods;
             UnitTestTemplate unitTestTemplate = new UnitTestTemplate(details);
-            unitTestTemplate.WriteFile();
+            unitTestTemplate.WriteFile(SolutionFilePath);
             return details;
         }
 
