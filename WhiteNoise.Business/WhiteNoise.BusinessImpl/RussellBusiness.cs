@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using WhiteNoise.Business;
 
 namespace WhiteNoise.BusinessImpl
@@ -15,6 +16,16 @@ namespace WhiteNoise.BusinessImpl
             if (temp < 10)
                 return 0;
             return 1;
+        }
+
+        public int RussellMethodComplex3(List<string> list)
+        {
+            return 0;
+        }
+
+        public bool RussellMethodComplex4(List<TheOldEntity> entities, Dictionary<string, string> dict)
+        {
+            return false;
         }
     }
 }

@@ -11,5 +11,9 @@ namespace WhiteNoise.Business
         void RussellMethod1();
 
         int RussellMethod2(int temp);
+
+        int RussellMethodComplex3(List<string> list);
+
+        bool RussellMethodComplex4(List<TheOldEntity> entities, Dictionary<string, string> dict);
     }
 }
