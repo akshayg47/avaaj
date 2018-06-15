@@ -153,12 +153,6 @@ namespace Avaaj.Template
         {
             var projectFileLocation = $"{solutionFilePath}\\{_projectFolderName}";
             string fileName = $"{ClassUnderTest}Test.cs";
-            var p = new Microsoft.Build.Evaluation.Project($"{projectFileLocation}\\{_projectName}.csproj");
-
-
-            p.AddItem("Compile", $"{projectFileLocation}\\{fileName}");
-            p.Save();
-
             string filePath = Path.Combine(projectFileLocation, fileName);
             if (File.Exists(filePath))
             {
@@ -167,6 +161,9 @@ namespace Avaaj.Template
             }
             else
             {
+                var p = new Microsoft.Build.Evaluation.Project($"{projectFileLocation}\\{_projectName}.csproj");
+                p.AddItem("Compile", $"{projectFileLocation}\\{fileName}");
+                p.Save();
                 var pageContent = TransformText();
                 File.WriteAllText(filePath, pageContent);
             }
