@@ -21,22 +21,16 @@ namespace Avaaj.Dialogs
     /// </summary>
     public partial class AddTestWindow
     {
-        public AddTestWindow(List<CandidatesModel> candidates)
+
+        private List<CandidatesModel> _candidates;
+        private MethodsInspector _methodsInspector;
+
+        public AddTestWindow(MethodsInspector methodsInspector)
         {
+            _methodsInspector = methodsInspector;
+            _candidates = methodsInspector.GetAllMethods();
             InitializeComponent();
-            this.Loaded += OnLoaded;                    
-
-            InnerGrid.ShowGridLines = true;
-
-            // Create Columns
-            ColumnDefinition gridCol1 = new ColumnDefinition();
-            ColumnDefinition gridCol2 = new ColumnDefinition();
-            ColumnDefinition gridCol3 = new ColumnDefinition();
-            ColumnDefinition gridCol4 = new ColumnDefinition();
-            InnerGrid.ColumnDefinitions.Add(gridCol1);
-            InnerGrid.ColumnDefinitions.Add(gridCol2);
-            InnerGrid.ColumnDefinitions.Add(gridCol3);
-            InnerGrid.ColumnDefinitions.Add(gridCol4);
+            this.Loaded += OnLoaded; 
 
             // Create Rows
             RowDefinition gridRow1 = new RowDefinition();
@@ -47,9 +41,10 @@ namespace Avaaj.Dialogs
             TextBlock txtBlock1 = new TextBlock();
             txtBlock1.Text = "#";
             txtBlock1.FontSize = 14;
-            txtBlock1.FontWeight = FontWeights.Bold;
-            txtBlock1.Foreground = new SolidColorBrush(Colors.Green);
-            txtBlock1.VerticalAlignment = VerticalAlignment.Top;
+            txtBlock1.FontWeight = FontWeights.Bold;           
+            txtBlock1.VerticalAlignment = VerticalAlignment.Center;
+            txtBlock1.HorizontalAlignment = HorizontalAlignment.Center;
+
             Grid.SetRow(txtBlock1, 0);
             Grid.SetColumn(txtBlock1, 0);
 
@@ -57,9 +52,9 @@ namespace Avaaj.Dialogs
             TextBlock txtBlock2 = new TextBlock();
             txtBlock2.Text = "Interface";
             txtBlock2.FontSize = 14;
-            txtBlock2.FontWeight = FontWeights.Bold;
-            txtBlock2.Foreground = new SolidColorBrush(Colors.Green);
-            txtBlock2.VerticalAlignment = VerticalAlignment.Top;
+            txtBlock2.FontWeight = FontWeights.Bold;         
+            txtBlock2.VerticalAlignment = VerticalAlignment.Center;
+            txtBlock2.HorizontalAlignment = HorizontalAlignment.Center;
             Grid.SetRow(txtBlock2, 0);
             Grid.SetColumn(txtBlock2, 1);
 
@@ -67,9 +62,9 @@ namespace Avaaj.Dialogs
             TextBlock txtBlock3 = new TextBlock();
             txtBlock3.Text = "Method";
             txtBlock3.FontSize = 14;
-            txtBlock3.FontWeight = FontWeights.Bold;
-            txtBlock3.Foreground = new SolidColorBrush(Colors.Green);
-            txtBlock3.VerticalAlignment = VerticalAlignment.Top;
+            txtBlock3.FontWeight = FontWeights.Bold;           
+            txtBlock3.VerticalAlignment = VerticalAlignment.Center;
+            txtBlock3.HorizontalAlignment = HorizontalAlignment.Center;
             Grid.SetRow(txtBlock3, 0);
             Grid.SetColumn(txtBlock3, 2);
 
@@ -77,9 +72,9 @@ namespace Avaaj.Dialogs
             TextBlock txtBlock4 = new TextBlock();
             txtBlock4.Text = "Include?";
             txtBlock4.FontSize = 14;
-            txtBlock4.FontWeight = FontWeights.Bold;
-            txtBlock4.Foreground = new SolidColorBrush(Colors.Green);
-            txtBlock4.VerticalAlignment = VerticalAlignment.Top;
+            txtBlock4.FontWeight = FontWeights.Bold;          
+            txtBlock4.VerticalAlignment = VerticalAlignment.Center;
+            txtBlock4.HorizontalAlignment = HorizontalAlignment.Center;
             Grid.SetRow(txtBlock4, 0);
             Grid.SetColumn(txtBlock4, 3);
 
@@ -88,39 +83,48 @@ namespace Avaaj.Dialogs
             InnerGrid.Children.Add(txtBlock2);
             InnerGrid.Children.Add(txtBlock3);
             InnerGrid.Children.Add(txtBlock4);
+            InnerGrid.Background = new SolidColorBrush(Colors.White);
+
             int i = 0;
 
-            foreach (var candidate in candidates)
+            foreach (var candidate in _candidates)
             {
                 i++;
 
                 // Create Grid raw
                 RowDefinition gridRow = new RowDefinition();
-                gridRow.Height = new GridLength(45);
-                InnerGrid.RowDefinitions.Add(gridRow);
+                gridRow.Height = new GridLength(30);
+               
+                InnerGrid.RowDefinitions.Add(gridRow);               
 
                 TextBlock candidateNumber = new TextBlock();
                 candidateNumber.Text = i.ToString();
-                candidateNumber.FontSize = 12;
-                candidateNumber.FontWeight = FontWeights.Bold;
+                candidateNumber.FontSize = 12;             
+                candidateNumber.VerticalAlignment = VerticalAlignment.Center;
+                candidateNumber.HorizontalAlignment = HorizontalAlignment.Center;      
                 Grid.SetRow(candidateNumber, i);
                 Grid.SetColumn(candidateNumber, 0);
 
                 TextBlock candidateInterface = new TextBlock();
                 candidateInterface.Text = candidate.InterfaceName;
-                candidateInterface.FontSize = 12;
-                candidateInterface.FontWeight = FontWeights.Bold;
+                candidateInterface.FontSize = 12;          
+                candidateInterface.VerticalAlignment = VerticalAlignment.Center;
+                candidateInterface.HorizontalAlignment = HorizontalAlignment.Center;      
                 Grid.SetRow(candidateInterface, i);
                 Grid.SetColumn(candidateInterface, 1);
 
                 TextBlock candidateMethod = new TextBlock();
                 candidateMethod.Text = candidate.MethodName;
-                candidateMethod.FontSize = 12;
-                candidateMethod.FontWeight = FontWeights.Bold;
+                candidateMethod.FontSize = 12; 
+                candidateMethod.VerticalAlignment = VerticalAlignment.Center;
+                candidateMethod.HorizontalAlignment = HorizontalAlignment.Center;
                 Grid.SetRow(candidateMethod, i);
                 Grid.SetColumn(candidateMethod, 2);
 
                 CheckBox isIncluded = new CheckBox();
+                isIncluded.Name = "Checkbox_" + i.ToString();
+                isIncluded.VerticalAlignment = VerticalAlignment.Center;
+                isIncluded.HorizontalAlignment = HorizontalAlignment.Center;
                 Grid.SetRow(isIncluded, i);
                 Grid.SetColumn(isIncluded, 3);
 
@@ -147,6 +151,23 @@ namespace Avaaj.Dialogs
             {
                 this.Close();
             };
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var checkboxes = InnerGrid.
+                 Children
+                 .Cast<UIElement>() 
+                 .Where(x => x is CheckBox).Where(y => ((CheckBox)y).IsChecked.Value).ToList();
+            var selectedCandidates = new List<CandidatesModel>();
+            foreach (CheckBox checkbox in checkboxes)
+            {
+                var index = Convert.ToInt16(checkbox.Name.Split('_')[1])-1;
+                selectedCandidates.Add(_candidates[index]);
+            }
+
+            _methodsInspector.GetElementsForScaffolding(selectedCandidates);
+            this.Close();
         }
     }
 }

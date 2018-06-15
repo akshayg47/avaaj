@@ -97,14 +97,19 @@ namespace Avaaj
             string activeDocumentName = GetActiveDocumentFileName(ServiceProvider);
             var activeDllPath = GetActiveDocumentAssemblyPath(ServiceProvider);
             var methodInspector = new MethodsInspector(activeDocumentName, selection.Text, activeDllPath);
-            var candidates = methodInspector.GetAllMethods();
-
-            ShowAddTestWindow(candidates, selection);
+            methodInspector.SolutionFilePath = GetSolutionFilePath(ServiceProvider);
+            ShowAddTestWindow(methodInspector, selection);
         }
 
-        private void ShowAddTestWindow(List<CandidatesModel> candidates, TextViewSelection selection)
+        private string GetSolutionFilePath(IServiceProvider serviceProvider)
         {
-            var documentationControl = new AddTestWindow(candidates);
+            EnvDTE80.DTE2 applicationObject = serviceProvider.GetService(typeof(DTE)) as EnvDTE80.DTE2;
+            return Path.GetDirectoryName(applicationObject.Solution.FileName);
+        }
+
+        private void ShowAddTestWindow(MethodsInspector methodsInspector, TextViewSelection selection)
+        {
+            var documentationControl = new AddTestWindow(methodsInspector);
             documentationControl.DataContext = new EditViewModel(selection);
             documentationControl.ShowDialog();
         }

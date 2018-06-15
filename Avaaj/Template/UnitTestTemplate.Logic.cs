@@ -10,6 +10,9 @@ namespace Avaaj.Template
 {
     public partial class UnitTestTemplate
     {
+        private readonly string _projectName;
+        private readonly string _projectFolderName;
+
         private readonly ScaffoldingElements _classProperties;
 
         private List<string> _methodParameters;
@@ -38,10 +41,12 @@ namespace Avaaj.Template
 
         public UnitTestTemplate(ScaffoldingElements properties)
         {
+            _projectName = "WhiteNoise.BusinessImpl.Test";
+            _projectFolderName= "WhiteNoise.Business.Test";
             _methodParameters = new List<string>();
             _classProperties = properties;
             ClassUnderTest = _classProperties.ContainingClassName;
-            ContainingNamespace = $"{ClassUnderTest}.Test";
+            ContainingNamespace = _projectName;
             TestClassName = $"{ClassUnderTest}Test";
         }
 
@@ -144,17 +149,17 @@ namespace Avaaj.Template
             return sb.ToString();
         }
 
-        public void WriteFile()
+        public void WriteFile(string solutionFilePath)
         {
+            var projectFileLocation = $"{solutionFilePath}\\{_projectFolderName}";
             string fileName = $"{ClassUnderTest}Test.cs";
-            string directory = Path.Combine(Directory.GetCurrentDirectory(), "Output");
+            var p = new Microsoft.Build.Evaluation.Project($"{projectFileLocation}\\{_projectName}.csproj");
 
-            if (!Directory.Exists(directory))
-            {
-                Directory.CreateDirectory(directory);
-            }
 
-            string filePath = Path.Combine(directory, fileName);
+            p.AddItem("Compile", $"{projectFileLocation}\\{fileName}");
+            p.Save();
+
+            string filePath = Path.Combine(projectFileLocation, fileName);
             if (File.Exists(filePath))
             {
                 var sb = AppendMethodToFile(filePath);

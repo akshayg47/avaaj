@@ -9,9 +9,6 @@
 // ------------------------------------------------------------------------------
 namespace Avaaj.Template
 {
-    using System.Linq;
-    using System.Text;
-    using System.Collections.Generic;
     using System;
     
     /// <summary>
@@ -28,10 +25,10 @@ namespace Avaaj.Template
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("// ------------------------------------------------------------------------------" +
-                    "--------------------------------------\r\n// <copyright file=\"");
+            this.Write("\n// -----------------------------------------------------------------------------" +
+                    "---------------------------------------\n// <copyright file=\"");
             
-            #line 7 "C:\avaaj\Avaaj\Template\UnitTestTemplate.tt"
+            #line 1 "C:\avaaj\Avaaj\Template\UnitTestTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TestClassName));
             
             #line default
@@ -45,45 +42,45 @@ namespace Avaaj.Template
 
 namespace ");
             
-            #line 14 "C:\avaaj\Avaaj\Template\UnitTestTemplate.tt"
+            #line 1 "C:\avaaj\Avaaj\Template\UnitTestTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ContainingNamespace));
             
             #line default
             #line hidden
-            this.Write("\r\n{\r\n    using System;\r\n\tusing Xunit;\r\n\tusing Telerik.JustMock;\r\n    using Teleri" +
-                    "k.JustMock.AutoMock;\r\n");
+            this.Write("\n{\n    using System;\n\tusing System.Linq;\n\tusing Xunit;\n\tusing Telerik.JustMock;\n " +
+                    "   using Telerik.JustMock.AutoMock;\n");
             
-            #line 20 "C:\avaaj\Avaaj\Template\UnitTestTemplate.tt"
+            #line 1 "C:\avaaj\Avaaj\Template\UnitTestTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(WriteUsingStatements()));
             
             #line default
             #line hidden
-            this.Write("\r\n\r\n    /// <summary>\r\n    /// Unit tests for ");
+            this.Write("\n\n    /// <summary>\n    /// Unit tests for ");
             
-            #line 23 "C:\avaaj\Avaaj\Template\UnitTestTemplate.tt"
+            #line 1 "C:\avaaj\Avaaj\Template\UnitTestTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ClassUnderTest));
             
             #line default
             #line hidden
-            this.Write("\r\n    /// </summary>    \r\n    [Trait(\"Mocking\", \"Basic\")]\r\n    public class ");
+            this.Write("\n    /// </summary>    \n    [Trait(\"Mocking\", \"Basic\")]\n    public class ");
             
-            #line 26 "C:\avaaj\Avaaj\Template\UnitTestTemplate.tt"
+            #line 1 "C:\avaaj\Avaaj\Template\UnitTestTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TestClassName));
             
             #line default
             #line hidden
-            this.Write("\r\n    {\r\n        /// <summary>\r\n        /// List of parameter types in the larges" +
-                    "t <see cref=\"");
+            this.Write("\n    {\n        /// <summary>\n        /// List of parameter types in the largest <" +
+                    "see cref=\"");
             
-            #line 29 "C:\avaaj\Avaaj\Template\UnitTestTemplate.tt"
+            #line 1 "C:\avaaj\Avaaj\Template\UnitTestTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ClassUnderTest));
             
             #line default
             #line hidden
-            this.Write("\"/> constructor in terms of number of params\r\n        /// </summary>\r\n        pri" +
-                    "vate static readonly Type[] CtorParamTypes = typeof(");
+            this.Write("\"/> constructor in terms of number of params\n        /// </summary>\n        priva" +
+                    "te static readonly Type[] CtorParamTypes = typeof(");
             
-            #line 31 "C:\avaaj\Avaaj\Template\UnitTestTemplate.tt"
+            #line 1 "C:\avaaj\Avaaj\Template\UnitTestTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ClassUnderTest));
             
             #line default
@@ -94,65 +91,47 @@ namespace ");
 																					GetParameters().
 																					Select(param => param.ParameterType).
 																					ToArray();
-		
-		/// <summary>
-        /// Initializes a new instance of the <see cref=""");
+				
+");
             
-            #line 39 "C:\avaaj\Avaaj\Template\UnitTestTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(TestClassName));
-            
-            #line default
-            #line hidden
-            this.Write("\"/> class.\r\n        /// </summary>\r\n        public ");
-            
-            #line 41 "C:\avaaj\Avaaj\Template\UnitTestTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(TestClassName));
-            
-            #line default
-            #line hidden
-            this.Write("()\r\n        {\r\n            WellKnownObjects.EnvironmentSettings = new Environment" +
-                    "Settings\r\n            {\r\n                DeploymentMode = DeploymentMode.Test\r\n " +
-                    "           };\r\n        }\r\n\r\n");
-            
-            #line 49 "C:\avaaj\Avaaj\Template\UnitTestTemplate.tt"
+            #line 1 "C:\avaaj\Avaaj\Template\UnitTestTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(WriteMethodTest()));
             
             #line default
             #line hidden
-            this.Write("        \r\n\r\n        /// <summary>\r\n        /// Generates mocked container of the " +
-                    "");
+            this.Write("        \n\n        /// <summary>\n        /// Generates mocked container of the ");
             
-            #line 52 "C:\avaaj\Avaaj\Template\UnitTestTemplate.tt"
+            #line 1 "C:\avaaj\Avaaj\Template\UnitTestTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ClassUnderTest));
             
             #line default
             #line hidden
-            this.Write(" class\' constructor\r\n        /// </summary>\r\n        /// <returns>MockingContaine" +
-                    "r of type ");
+            this.Write(" class\' constructor\n        /// </summary>\n        /// <returns>MockingContainer " +
+                    "of type ");
             
-            #line 54 "C:\avaaj\Avaaj\Template\UnitTestTemplate.tt"
+            #line 1 "C:\avaaj\Avaaj\Template\UnitTestTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ClassUnderTest));
             
             #line default
             #line hidden
-            this.Write("</returns>\r\n        private MockingContainer<");
+            this.Write("</returns>\n        private MockingContainer<");
             
-            #line 55 "C:\avaaj\Avaaj\Template\UnitTestTemplate.tt"
+            #line 1 "C:\avaaj\Avaaj\Template\UnitTestTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ClassUnderTest));
             
             #line default
             #line hidden
-            this.Write("> CreateMockingContainer()\r\n        {\r\n            var mockingContainer = new Moc" +
-                    "kingContainer<");
+            this.Write("> CreateMockingContainer()\n        {\n            var mockingContainer = new Mocki" +
+                    "ngContainer<");
             
-            #line 57 "C:\avaaj\Avaaj\Template\UnitTestTemplate.tt"
+            #line 1 "C:\avaaj\Avaaj\Template\UnitTestTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ClassUnderTest));
             
             #line default
             #line hidden
-            this.Write(">(new AutoMockSettings()\r\n            {\r\n                ConstructorArgTypes = Ct" +
-                    "orParamTypes\r\n            });\r\n\r\n            return mockingContainer;\r\n        }" +
-                    "\r\n    }\r\n}\r\n");
+            this.Write(">(new AutoMockSettings()\n            {\n                ConstructorArgTypes = Ctor" +
+                    "ParamTypes\n            });\n\n            return mockingContainer;\n        }\n    }" +
+                    "\n}\n");
             return this.GenerationEnvironment.ToString();
         }
     }
